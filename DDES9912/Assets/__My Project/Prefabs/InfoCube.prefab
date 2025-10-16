@@ -282,6 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   value: 0
+  valueText: {fileID: 4990219278746204011}
 --- !u!114 &3666900232603461878
 MonoBehaviour:
   m_ObjectHideFlags: 0

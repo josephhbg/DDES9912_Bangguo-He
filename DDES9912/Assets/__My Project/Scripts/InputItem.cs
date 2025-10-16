@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class InputItem : MonoBehaviour
@@ -9,6 +10,8 @@ public class InputItem : MonoBehaviour
     //0-9对应的数值
     public int value;
 
+    public TextMeshPro valueText;
+
     private void Start()
     {
         index = int.Parse(transform.parent.parent.name);
@@ -18,6 +21,12 @@ public class InputItem : MonoBehaviour
     public void ClickMe()
     {
         CalculatorManager.Instance.ClickInputItem(this);
+        valueText.color = Color.green;
+    }
+
+    public void BackColor()
+    {
+        valueText.color = Color.white;
     }
 
 }

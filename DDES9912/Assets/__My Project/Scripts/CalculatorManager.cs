@@ -1,6 +1,7 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CalculatorManager : MonoBehaviour
 {
@@ -15,11 +16,13 @@ public class CalculatorManager : MonoBehaviour
     public TextMeshPro[] multTexts;
 
     public Transform[] inputRoots;
+    public InputItem[] zeroItems;
 
     public Transform rotateRoot;
 
     public int inputValue = 0;
     public int multValue = 0;
+    public int resultValue = 0;
 
     public Transform moveRoot;
     public Vector3 moveBasePos;
@@ -30,13 +33,30 @@ public class CalculatorManager : MonoBehaviour
 
     public TextMeshPro[] resultTexts;
 
+    private Dictionary<int, InputItem> lastInputValues = new Dictionary<int, InputItem>();
+
     private void Awake()
     {
         Instance = this;
     }
 
+    private void Start()
+    {
+        ResetCalculator();
+    }
+
     public void ClickInputItem(InputItem inputItem)
     {
+        if (!lastInputValues.ContainsKey(inputItem.index))
+        {
+            lastInputValues.Add(inputItem.index, inputItem);
+        }
+        else
+        {
+            lastInputValues[inputItem.index].BackColor();
+            lastInputValues[inputItem.index] = inputItem;
+        }
+
         inputRoots[inputItem.index].DOLocalRotate(inputItem.value * 10 * Vector3.left, 0.03f * inputItem.value);
         inputs[inputItem.index] = inputItem.value;
 
@@ -54,10 +74,14 @@ public class CalculatorManager : MonoBehaviour
 
     public void AddRotate()
     {
-        rotateRoot.DOLocalRotate(Vector3.left * 360, 0.5f, RotateMode.LocalAxisAdd).OnComplete(() =>
+        rotateRoot.DOLocalRotate(Vector3.left * 180, 0.25f, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).OnComplete(() =>
         {
-            rotateRoot.localEulerAngles = Vector3.zero;
             UpdateMult();
+            UpdateResult();
+            rotateRoot.DOLocalRotate(Vector3.left * 360, 0.25f, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                rotateRoot.localEulerAngles = Vector3.zero;
+            });
         });
     }
 
@@ -85,6 +109,39 @@ public class CalculatorManager : MonoBehaviour
         if (multMoveIndex < 0)
             multMoveIndex = 0;
         moveRoot.DOLocalMove(moveBasePos + multMoveIndex * moveDelta, 0.25f);
+    }
+
+    public void UpdateResult()
+    {
+        resultValue += inputValue * delta[multMoveIndex];
+        for (int i = 0; i < resultTexts.Length; i++)
+        {
+            if (i < resultTexts.Length - 1)
+                resultTexts[i].text = $"{(resultValue % delta[i + 1]) / delta[i]}";
+            else
+                resultTexts[i].text = $"{resultValue / delta[i]}";
+        }
+    }
+
+    public void ResetCalculator()
+    {
+        inputValue = 0;
+        foreach (var item in zeroItems)
+        {
+            item.ClickMe();
+        }
+
+        multMoveIndex = 0;
+        moveRoot.DOLocalMove(moveBasePos + multMoveIndex * moveDelta, 0.25f);
+
+        multValue = 0;
+        for (int i = 0; i < multTexts.Length; i++)
+        {
+            multTexts[i].text = $"{(multValue % delta[i + 1]) / delta[i]}";
+        }
+
+        resultValue = 0;
+        UpdateResult();
     }
 
 }
