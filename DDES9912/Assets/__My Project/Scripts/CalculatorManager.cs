@@ -7,11 +7,11 @@ public class CalculatorManager : MonoBehaviour
 {
     public static CalculatorManager Instance;
 
-    //输入的5位
+    //Entered number
     public int[] inputs = new int[5];
     public int[] delta = new int[10] { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 };
 
-    //乘数的5位，也是转的圈数
+    //Number of joystick rotations
     public int[] mults = new int[5];
     public TextMeshPro[] multTexts;
 
