@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class InputItem : MonoBehaviour
 {
-    //Positions 1-5
+    //1-5位置
     public int index;
 
-    //
+    //0-9对应的数值
     public int value;
 
     public TextMeshPro valueText;
