@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
@@ -7,11 +7,11 @@ public class CalculatorManager : MonoBehaviour
 {
     public static CalculatorManager Instance;
 
-    //输入的5位
+    //The entered number
     public int[] inputs = new int[5];
     public int[] delta = new int[10] { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 };
 
-    //乘数的5位，也是转的圈数
+    //Multiplier, also the number of revolutions.
     public int[] mults = new int[5];
     public TextMeshPro[] multTexts;
 
@@ -48,10 +48,10 @@ public class CalculatorManager : MonoBehaviour
     }
 
 
-    //点击输入按钮，执行操作
+    //Click the input button to perform the operation.
     public void ClickInputItem(InputItem inputItem)
     {
-        //记录下点击的按钮，因为加了颜色显示，用来提示用户点的是哪个
+        //Record the clicked buttons, and highlight them with color to indicate which one the user clicked.
         if (!lastInputValues.ContainsKey(inputItem.index))
         {
             lastInputValues.Add(inputItem.index, inputItem);
